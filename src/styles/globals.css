@@ -1,0 +1,185 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --color-primary: 34 197 94; /* Green */
+  --color-primary-foreground: 255 255 255; /* White */
+  --color-secondary: 139 92 246; /* Violet */
+  --color-secondary-foreground: 255 255 255; /* White */
+  --color-background: 255 255 255; /* Light Mode Background */
+  --color-foreground: 17 24 39; /* Dark Gray for Text */
+  --color-border: 229 231 235; /* Light Gray Border */
+  --color-accent: 139 92 246; /* Violet Accent */
+  --color-accent-foreground: 255 255 255; /* White */
+}
+
+.dark {
+  --color-primary: 45 207 120; /* Softer Green in Dark Mode */
+  --color-primary-foreground: 255 255 255; /* White */
+  --color-secondary: 104 82 210; /* Darker Violet */
+  --color-secondary-foreground: 237 233 254; /* Light Violet */
+  --color-background: 24 30 42; /* Dark Mode Background */
+  --color-foreground: 243 244 246; /* Light Gray for Text */
+  --color-border: 75 85 99; /* Medium Gray Border */
+  --color-accent: 104 82 210; /* Softer Violet in Dark Mode */
+  --color-accent-foreground: 255 255 255; /* White */
+}
+
+body {
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Responsive Typography */
+h1 {
+  font-size: 2rem; /* Base font size */
+  font-weight: 700;
+  @apply md:text-3xl lg:text-4xl; /* Adjust for larger screens */
+}
+
+p {
+  font-size: 1rem; /* Base size */
+  line-height: 1.5;
+  @apply md:text-lg lg:text-xl; /* Scale up for larger screens */
+}
+
+/* Link styling */
+a {
+  color: rgb(var(--color-primary));
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: rgb(var(--color-accent));
+  text-decoration: underline;
+}
+
+/* Responsive Button Styling */
+button {
+  background: linear-gradient(145deg, rgba(var(--color-primary), 0.95), rgba(var(--color-primary), 0.75));
+  color: rgb(var(--color-primary-foreground));
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  
+  /* Responsive Padding */
+  @apply md:py-3 md:px-6 lg:py-4 lg:px-8;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+button:hover {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px); /* Lift button slightly */
+}
+
+button:active {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.2);
+  transform: translateY(2px); /* Press down */
+}
+
+button:hover::after {
+  opacity: 1; /* Highlight effect on hover */
+}
+
+/* Responsive Input Styling */
+input {
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.1), inset -6px -6px 12px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+
+  /* Responsive Width */
+  @apply w-full md:w-3/4 lg:w-1/2;
+}
+
+input:focus {
+  outline: none;
+  background: linear-gradient(145deg, rgba(var(--color-primary), 0.05), rgba(var(--color-accent), 0.05));
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.4);
+  color: rgb(var(--color-primary-foreground));
+}
+
+/* Responsive Layout for Forms and Sections */
+.section {
+  @apply p-4 md:p-8 lg:p-12; /* Adjust padding for larger screens */
+}
+
+.form {
+  @apply w-full md:w-3/4 lg:w-1/2 mx-auto; /* Center and adjust width */
+}
+
+.container {
+  @apply flex flex-col items-center md:flex-row md:items-start lg:space-x-8;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+.text-outline {
+  position: relative;
+  display: inline-block;
+}
+
+.text-outline::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  z-index: -1;
+  /* Adjust the blur and spread of the outline here */
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.9), -1px -1px 0 rgba(255, 255, 255, 0.9), 1px -1px 0 rgba(255, 255, 255, 0.9), -1px 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.text-3d {
+  position: relative;
+  display: inline-block;
+  color: rgba(139, 92, 246, 1); /* Violet color */
+  font-size: 2rem; /* Adjust size as needed */
+  font-weight: bold;
+  text-shadow: 
+    1px 1px 0 rgba(0, 0, 0, 0.2), 
+    2px 2px 0 rgba(0, 0, 0, 0.2), 
+    3px 3px 0 rgba(0, 0, 0, 0.2), 
+    4px 4px 0 rgba(0, 0, 0, 0.2), 
+    5px 5px 0 rgba(0, 0, 0, 0.2); /* Adjust shadow for 3D effect */
+  transform: perspective(500px) rotateX(5deg) rotateY(0deg);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.text-3d:hover {
+  transform: perspective(500px) rotateX(0deg) rotateY(10deg);
+}
