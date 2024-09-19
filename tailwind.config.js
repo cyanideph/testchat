@@ -1,28 +1,78 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class', // Enables class-based dark mode
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/**/*.html",
   ],
   theme: {
     extend: {
+      // You can extend your theme here if needed
       colors: {
-        primary: 'rgb(var(--color-primary))',
-        'primary-foreground': 'rgb(var(--color-primary-foreground))',
-        secondary: 'rgb(var(--color-secondary))',
-        'secondary-foreground': 'rgb(var(--color-secondary-foreground))',
-        background: 'rgb(var(--color-background))',
-        foreground: 'rgb(var(--color-foreground))',
-        border: 'rgb(var(--color-border))',
-        accent: 'rgb(var(--color-accent))',
-        'accent-foreground': 'rgb(var(--color-accent-foreground))',
-        lightViolet: 'rgb(139, 92, 246)',
-        darkMagenta: 'rgb(204, 51, 153)',
+        primary: {
+          DEFAULT: 'rgb(34, 197, 94)', // Green
+        },
+        secondary: {
+          DEFAULT: 'rgb(139, 92, 246)', // Violet
+        },
+        foreground: {
+          DEFAULT: 'rgb(255, 255, 255)', // White
+        },
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      "light",
+      "dark",
+      "cupcake",
+      "bumblebee",
+      "emerald",
+      "corporate",
+      "synthwave",
+      "retro",
+      "cyberpunk",
+      "valentine",
+      "halloween",
+      "garden",
+      "forest",
+      "aqua",
+      "lofi",
+      "pastel",
+      "fantasy",
+      "wireframe",
+      "black",
+      "luxury",
+      "dracula",
+      "cmyk",
+      "autumn",
+      "business",
+      "acid",
+      "lemonade",
+      "night",
+      "coffee",
+      "winter",
+      {
+        myCustomTheme: {
+          primary: 'rgb(34, 197, 94)', // Green
+          secondary: 'rgb(139, 92, 246)', // Violet
+          accent: 'rgb(255, 255, 255)', // White
+          neutral: '#3d4451', // Optional: Darker neutral color
+          'base-100': '#1f1f1f', // Background color for dark theme
+          'base-200': '#2a2a2a', // Slightly lighter background
+          'base-300': '#3a3a3a', // Even lighter background
+          'info': '#3abff8',
+          'success': '#36d399',
+          'warning': '#fbbd23',
+          'error': '#f87272',
+        },
+      },
+    ],
+    darkTheme: "dark",
+    base: true,
+    styled: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+  },
 }

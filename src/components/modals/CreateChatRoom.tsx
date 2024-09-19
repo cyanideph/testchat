@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { getDatabase, ref, set } from 'firebase/database';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
 
 interface CreateChatRoomProps {
   onClose: () => void;
 }
 
-export const CreateChatRoom: React.FC<CreateChatRoomProps> = ({ onClose }) => {
+export function CreateChatRoom({ onClose }: CreateChatRoomProps) {
   const [roomName, setRoomName] = useState('');
   const database = getDatabase();
 
@@ -21,28 +19,33 @@ export const CreateChatRoom: React.FC<CreateChatRoomProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-primary dark:text-primary">CREATE NEW CHATROOM</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="text"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            placeholder="Room Name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark focus:border-primary dark:focus:border-primary-dark"
-            required
-          />
-          <div className="flex justify-end space-x-2">
-            <Button type="button" onClick={onClose} variant="secondary" className="text-gray-700 bg-gray-200 hover:bg-gray-300 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-base-100 p-6 rounded-lg shadow-xl w-96 max-w-full">
+        <h3 className="text-lg font-bold mb-4">Create New Chatroom</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Room Name</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Room Name"
+              className="input input-bordered w-full"
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mt-6 flex justify-end space-x-2">
+            <button type="button" className="btn btn-ghost" onClick={onClose}>
               Cancel
-            </Button>
-            <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary-dark dark:bg-primary-dark dark:hover:bg-primary-darker">
+            </button>
+            <button type="submit" className="btn btn-primary">
               Create Room
-            </Button>
+            </button>
           </div>
         </form>
       </div>
     </div>
   );
-};
+}

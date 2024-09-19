@@ -1,83 +1,130 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useChat } from '../../hooks/useChat';
-import { Button } from '../ui/Button';
 import { CreateChatRoom } from '../modals/CreateChatRoom';
 import { UserProfile } from '../modals/UserProfile';
 import { About } from '../modals/About';
-import { Plus, User, Info, X } from 'lucide-react';
+import { Plus, User, Info, MessageSquare, Users, Calendar } from 'lucide-react';
 
 interface SidebarProps {
-  isOpen: boolean;
-  closeSidebar: () => void;
+  setActiveTab: (tab: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
-  const { rooms, currentRoom, setCurrentRoom } = useChat();
+export function Sidebar({ setActiveTab }: SidebarProps) {
+  const { rooms, currentRoom, setCurrentRoom, loading } = useChat(); // Assume loading is part of useChat
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [error, setError] = useState('');
+
+  // Validation function to check if the room is valid
+  const isValidRoom = (roomId: string) => {
+    return rooms.some(room => room.id === roomId);
+  };
+
+  // Effect to clear error after a certain duration
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
-    <>
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-darkMagneta dark:bg-lightViolet text-white dark:text-black transition-transform duration-300 ease-in-out shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:w-64`}
-      >
-        <div className="flex justify-between items-center p-4 md:hidden">
-          <h2 className="font-bold text-lg">CHATROOMS</h2>
-          <Button variant="ghost" size="icon" onClick={closeSidebar}>
-            <X className="h-5 w-5" />
-          </Button>
-        </div>
-        <div className="p-4">
-          <ul className="space-y-2">
-            {rooms.map((room) => (
-              <li key={room.id}>
-                <Button
-                  variant={currentRoom?.id === room.id ? 'default' : 'ghost'}
-                  className="w-full justify-start"
-                  onClick={() => {
+    <div className="drawer-side">
+      <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+      <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
+        <li className="menu-title">
+          <span>Navigation</span>
+        </li>
+        <li>
+          <button 
+            className="flex items-center space-x-2" 
+            onClick={() => setActiveTab('chat')}
+          >
+            <MessageSquare className="h-5 w-5" /> 
+            <span>Chat Rooms</span>
+          </button>
+        </li>
+        <li>
+          <button 
+            className="flex items-center space-x-2" 
+            onClick={() => setActiveTab('community')}
+          >
+            <Users className="h-5 w-5" /> 
+            <span>Community Feed</span>
+          </button>
+        </li>
+        <li>
+          <button 
+            className="flex items-center space-x-2" 
+            onClick={() => setActiveTab('users')}
+          >
+            <User className="h-5 w-5" /> 
+            <span>User Directory</span>
+          </button>
+        </li>
+        <li>
+          <button 
+            className="flex items-center space-x-2" 
+            onClick={() => setActiveTab('events')}
+          >
+            <Calendar className="h-5 w-5" /> 
+            <span>Event Calendar</span>
+          </button>
+        </li>
+        
+        <li className="menu-title">
+          <span>Chat Rooms</span>
+        </li>
+        {loading ? (
+          <li className="loading">
+            Loading chat rooms...
+          </li>
+        ) : (
+          rooms.map((room) => (
+            <li key={room.id}>
+              <button
+                className={`flex items-center space-x-2 ${currentRoom?.id === room.id ? 'active' : ''}`}
+                onClick={() => {
+                  if (isValidRoom(room.id)) {
                     setCurrentRoom(room);
-                    closeSidebar();
-                  }}
-                >
-                  # {room.name}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <Button
-            variant="ghost"
-            className="w-full mb-2"
-            onClick={() => setShowCreateRoom(true)}
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            CREATE ROOM
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full mb-2"
-            onClick={() => setShowUserProfile(true)}
-          >
-            <User className="h-5 w-5 mr-2" />
-            EDIT PROFILE
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full"
-            onClick={() => setShowAbout(true)}
-          >
-            <Info className="h-5 w-5 mr-2" />
-            ABOUT
-          </Button>
-        </div>
-      </aside>
-
-      {/* Modals */}
+                    setActiveTab('chat');
+                  } else {
+                    setError(`Invalid room selected: ${room.name}`);
+                  }
+                }}
+              >
+                <span># {room.name}</span>
+              </button>
+            </li>
+          ))
+        )}
+        {error && <li className="text-red-500">{error}</li>}
+        <li className="menu-title">
+          <span>Actions</span>
+        </li>
+        <li>
+          <button className="flex items-center space-x-2" onClick={() => setShowCreateRoom(true)}>
+            <Plus className="h-5 w-5" />
+            <span>Create Room</span>
+          </button>
+        </li>
+        <li>
+          <button className="flex items-center space-x-2" onClick={() => setShowUserProfile(true)}>
+            <User className="h-5 w-5" />
+            <span>Edit Profile</span>
+          </button>
+        </li>
+        <li>
+          <button className="flex items-center space-x-2" onClick={() => setShowAbout(true)}>
+            <Info className="h-5 w-5" />
+            <span>About</span>
+          </button>
+        </li>
+      </ul>
       {showCreateRoom && <CreateChatRoom onClose={() => setShowCreateRoom(false)} />}
       {showUserProfile && <UserProfile onClose={() => setShowUserProfile(false)} />}
       {showAbout && <About onClose={() => setShowAbout(false)} />}
-    </>
+    </div>
   );
-};
+}

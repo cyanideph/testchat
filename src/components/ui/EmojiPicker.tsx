@@ -6,12 +6,15 @@ interface EmojiPickerProps {
   onEmojiSelect: (emoji: string) => void;
 }
 
-export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect }) => {
+export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
   return (
-    <Picker
-      data={data}
-      onEmojiSelect={(emoji: any) => onEmojiSelect(emoji.native)}
-      theme="auto"
-    />
+    <div className="absolute z-10">
+      <Picker
+        data={data}
+        onEmojiSelect={(emoji: { native: string }) => onEmojiSelect(emoji.native)} // Use an inline type
+        theme="light"
+        set="apple"
+      />
+    </div>
   );
-};
+}
